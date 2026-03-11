@@ -102,32 +102,7 @@ def parse_response(raw):
 # ===================================================================
 
 def decode_chunked(body):
-    """Decode a chunked transfer-encoded body.
-
-    Chunked format:
-        <chunk-size-in-hex>\r\n
-        <chunk-data>\r\n
-        ...
-        0\r\n
-        \r\n
-
-    Args:
-        body: bytes — the raw chunked body
-
-    Returns:
-        bytes — the decoded body
-    """
-    # TODO: Implement chunked decoding.
-    #
-    # Hints from the lab:
-    #   - Each chunk starts with its size in hexadecimal, followed by \r\n
-    #   - Then the chunk data, followed by \r\n
-    #   - A chunk of size 0 signals the end
-    #   - Use int(size_line, 16) to convert hex to int
-    #
-    # Example:
-    #   b"1a\r\n<26 bytes of data>\r\n0\r\n\r\n"
-    def decode_chunked(body):
+    """Decode a chunked transfer-encoded body."""
     decoded = b""
     while body:
         size_line, _, body = body.partition(b"\r\n")
