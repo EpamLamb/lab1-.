@@ -120,41 +120,11 @@ def decode_chunked(body):
 # Step 5: Fetch a URL (following redirects)
 # ===================================================================
 
-def fetch(url, max_redirects=5):
-    """Fetch a URL, following up to max_redirects redirects.
-
-    Args:
-        url: str — the URL to fetch
-        max_redirects: int — maximum number of redirects to follow
-
-    Returns:
-        (final_url, status_code, reason, headers, body)
-
-    Raises:
-        Exception if too many redirects
-    """
-    # TODO: Implement fetch with redirect handling.
-    #
-    # Hints from the lab:
-    #   1. Loop up to max_redirects times
-    #   2. Call parse_url() to get host, port, path
-    #   3. Call http_get() to get the raw response
-    #   4. Call parse_response() to parse it
-    #   5. If status is 301 or 302:
-    #      - Read the "location" header
-    #      - Use urljoin(url, location) to handle relative redirects
-    #      - Update url and continue the loop
-    #   6. If status is not a redirect:
-    #      - Check if Transfer-Encoding is chunked; if so, decode the body
-    #      - Return the result
-    #   7. If the loop ends, raise an exception
-    from urllib.parse import urljoin
-
-def fetch(url, max_redirects=5):
+def fetch(url, max_redirects=5): 
     for _ in range(max_redirects):
         host, port, path = parse_url(url)
         raw = http_get(host, port, path)
-        status, headers, body = parse_response(raw)
+        status, reason, headers, body = parse_response(raw)
         
         if status in (301, 302, 303, 307, 308):
             location = headers.get("location", "")
@@ -162,7 +132,10 @@ def fetch(url, max_redirects=5):
             print(f"Redirect {status} -> {url}")
             continue
         
-        return status, headers, body
+        if 'transfer-encoding' in headers and headers['transfer-encoding'] == 'chunked':
+            body = decode_chunked(body)
+        
+        return status, reason, headers, body
     
     raise Exception("Too many redirects")
     
