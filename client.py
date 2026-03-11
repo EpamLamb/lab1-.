@@ -168,44 +168,7 @@ def extract_links(html, base_url):
 # ===================================================================
 
 def crawl(start_url, max_pages=10, verbose=False):
-    """Crawl starting from start_url using BFS.
-
-    Visit up to max_pages unique pages. For each page, print:
-        [N] <url> -> <status_code> <reason> (<body_size> bytes)
-            Found <M> links
-
-    If verbose is True, also print each discovered link:
-            -> <link_url>
-
-    For redirects, print:
-        [N] <url> -> <status_code> -> <redirect_url>
-
-    At the end, print:
-        Crawled <N> pages, found <M> unique links.
-
-    Args:
-        start_url: str — the starting URL
-        max_pages: int — maximum pages to visit
-        verbose: bool — if True, print each link found
-    """
-    # TODO: Implement the BFS crawler.
-    #
-    # Hints from the lab:
-    #   1. Use a set() for visited URLs
-    #   2. Use collections.deque() as the BFS queue
-    #   3. While the queue is not empty and len(visited) < max_pages:
-    #      a. Pop a URL from the queue
-    #      b. Skip if already visited
-    #      c. Add to visited
-    #      d. Call fetch() — handle exceptions gracefully
-    #      e. Check Content-Type: skip non-HTML responses
-    #      f. Decode the body and call extract_links()
-    #      g. If verbose, print each link
-    #      h. Add new links to the queue
-    #   4. Print the summary at the end
-    from collections import deque
-
-def crawl(start_url, max_pages=10):
+    """Crawl starting from start_url using BFS."""
     visited = set()
     queue = deque([start_url])
     
@@ -217,7 +180,7 @@ def crawl(start_url, max_pages=10):
         visited.add(url)
         
         try:
-            status, headers, body = fetch(url)
+            status, reason, headers, body = fetch(url)
             if status != 200:
                 continue
             content_type = headers.get("content-type", "")
@@ -227,9 +190,14 @@ def crawl(start_url, max_pages=10):
             for link in extract_links(html, url):
                 if link not in visited:
                     queue.append(link)
+            if verbose:
+                print("Found links:")
+                for link in extract_links(html, url):
+                    print(f" -> {link}")
         except Exception as e:
             print(f"Error crawling {url}: {e}")
     
+    print(f"Crawled {len(visited)} pages.")
     return visited
 
    
