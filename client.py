@@ -190,6 +190,7 @@ def fetch(url, max_redirects=5):
         return status, headers, body
     
     raise Exception("Too many redirects")
+    
 
     raise NotImplementedError("TODO: implement fetch")
 
@@ -215,6 +216,19 @@ def extract_links(html, base_url):
     #   - Use urljoin(base_url, link) to convert relative to absolute
     #   - Filter: only keep links starting with "http"
     #   - Skip mailto:, javascript:, etc.
+    import re
+
+def extract_links(html, base_url):
+    pattern = r'href=["\']([^"\']+)["\']'
+    raw_links = re.findall(pattern, html)
+    
+    links = []
+    for link in raw_links:
+        absolute = urljoin(base_url, link)
+        if absolute.startswith("http"):
+            links.append(absolute)
+    
+    return links
 
     raise NotImplementedError("TODO: implement extract_links")
 
