@@ -148,25 +148,7 @@ def fetch(url, max_redirects=5):
 # ===================================================================
 
 def extract_links(html, base_url):
-    """Extract all href links from HTML and resolve them to absolute URLs.
-
-    Args:
-        html: str — the HTML content
-        base_url: str — the URL of the page (for resolving relative links)
-
-    Returns:
-        list of str — absolute HTTP URLs found in the page
-    """
-    # TODO: Implement link extraction.
-    #
-    # Hints from the lab:
-    #   - Use re.findall() with pattern: r'href=["\']([^"\']+)["\']'
-    #   - Use urljoin(base_url, link) to convert relative to absolute
-    #   - Filter: only keep links starting with "http"
-    #   - Skip mailto:, javascript:, etc.
-    import re
-
-def extract_links(html, base_url):
+    """Extract all href links from HTML and resolve them to absolute URLs."""
     pattern = r'href=["\']([^"\']+)["\']'
     raw_links = re.findall(pattern, html)
     
