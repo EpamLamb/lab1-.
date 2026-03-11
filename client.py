@@ -173,6 +173,23 @@ def fetch(url, max_redirects=5):
     #      - Check if Transfer-Encoding is chunked; if so, decode the body
     #      - Return the result
     #   7. If the loop ends, raise an exception
+    from urllib.parse import urljoin
+
+def fetch(url, max_redirects=5):
+    for _ in range(max_redirects):
+        host, port, path = parse_url(url)
+        raw = http_get(host, port, path)
+        status, headers, body = parse_response(raw)
+        
+        if status in (301, 302, 303, 307, 308):
+            location = headers.get("location", "")
+            url = urljoin(url, location)
+            print(f"Redirect {status} -> {url}")
+            continue
+        
+        return status, headers, body
+    
+    raise Exception("Too many redirects")
 
     raise NotImplementedError("TODO: implement fetch")
 
