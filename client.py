@@ -192,7 +192,7 @@ def fetch(url, max_redirects=5):
     raise Exception("Too many redirects")
     
 
-    raise NotImplementedError("TODO: implement fetch")
+    
 
 
 # ===================================================================
@@ -230,7 +230,7 @@ def extract_links(html, base_url):
     
     return links
 
-    raise NotImplementedError("TODO: implement extract_links")
+    
 
 
 # ===================================================================
@@ -302,7 +302,7 @@ def crawl(start_url, max_pages=10):
     
     return visited
 
-    raise NotImplementedError("TODO: implement crawl")
+   
 
 
 # ===================================================================
