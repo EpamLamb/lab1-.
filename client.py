@@ -138,7 +138,7 @@ def decode_chunked(body):
         body = body[chunk_size + 2:]  # skip CRLF
     return decoded
 
-    raise NotImplementedError("TODO: implement decode_chunked")
+    
 
 
 # ===================================================================
