@@ -127,6 +127,16 @@ def decode_chunked(body):
     #
     # Example:
     #   b"1a\r\n<26 bytes of data>\r\n0\r\n\r\n"
+    def decode_chunked(body):
+    decoded = b""
+    while body:
+        size_line, _, body = body.partition(b"\r\n")
+        chunk_size = int(size_line.strip(), 16)
+        if chunk_size == 0:
+            break
+        decoded += body[:chunk_size]
+        body = body[chunk_size + 2:]  # skip CRLF
+    return decoded
 
     raise NotImplementedError("TODO: implement decode_chunked")
 
