@@ -273,6 +273,34 @@ def crawl(start_url, max_pages=10, verbose=False):
     #      g. If verbose, print each link
     #      h. Add new links to the queue
     #   4. Print the summary at the end
+    from collections import deque
+
+def crawl(start_url, max_pages=10):
+    visited = set()
+    queue = deque([start_url])
+    
+    while queue and len(visited) < max_pages:
+        url = queue.popleft()
+        if url in visited:
+            continue
+        print(f"Crawling: {url}")
+        visited.add(url)
+        
+        try:
+            status, headers, body = fetch(url)
+            if status != 200:
+                continue
+            content_type = headers.get("content-type", "")
+            if "text/html" not in content_type:
+                continue
+            html = body.decode("utf-8", errors="replace")
+            for link in extract_links(html, url):
+                if link not in visited:
+                    queue.append(link)
+        except Exception as e:
+            print(f"Error crawling {url}: {e}")
+    
+    return visited
 
     raise NotImplementedError("TODO: implement crawl")
 
